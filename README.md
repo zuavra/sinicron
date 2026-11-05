@@ -11,24 +11,45 @@ sinicron was designed with the following goals:
 * Optionally include a process scheduler with a classic crontab format.
 * Optionally include passwordless sudo capability for the designated user.
 
-## Quick start
+**Content:**
+
+<!-- TOC depthfrom:2 -->
+
+- [1. Quick start](#1-quick-start)
+- [2. Using the image](#2-using-the-image)
+  - [2.1. Common characteristics](#21-common-characteristics)
+  - [2.2. Using the service manager](#22-using-the-service-manager)
+  - [2.3. Using the process scheduler](#23-using-the-process-scheduler)
+  - [2.4. Using sudo](#24-using-sudo)
+  - [2.5. Security considerations](#25-security-considerations)
+- [3. Building your own image](#3-building-your-own-image)
+  - [3.1. Build arguments](#31-build-arguments)
+  - [3.2. An example for extending the base image](#32-an-example-for-extending-the-base-image)
+
+<!-- /TOC -->
+
+## 1. Quick start
 
 There are always 4 flavors of the image, combinations of with/without cron and sudo.
 
-There is no `:latest` tag (you must always specify the version and sudo/cron suffixes) but there are semantic shortcuts to the latest version.
-
 These are the current latest tags:
 
-* `1-nosudo-nocron`
-* `1-nosudo-cron`
-* `1-sudo-nocron`
-* `1-sudo-cron`
+* [latest-sudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1510700299?tag=latest-sudo-nocron)
+* [latest-sudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1510699938?tag=latest-sudo-cron)
+* [latest-nosudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1510699240?tag=latest-nosudo-nocron)
+* [latest-nosudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1510677637?tag=latest-nosudo-cron)
 
 You can also use an exact version (e.g. `1.2.3-nosudo-nocron`), or a minor version shortcut to the latest version of that minor (e.g. `1.2-nosudo-nocron`).
 
-## Using the image
+## 2. Using the image
 
-### Using the service manager
+### 2.1. Common characteristics
+
+All image flavors run as designated user `1000:1000` by default (name/group `somebody`/`somebody` inside the image). This is what the service manager, the process scheduler and all processes started by them run as. This is also the user that has access to passwordless sudo in the relevant images.
+
+All image flavors provide the service manager as PID 1.
+
+### 2.2. Using the service manager
 
 The service manager being used by `sinicron` is [dinit](https://davmac.org/projects/dinit/).
 
@@ -60,7 +81,7 @@ restart = true
 
 > Please note that by default `dinit` will give up on services that have restarted 3 times within 10 seconds. See the `restart-` definition directives for tweaking this behavior. 
 
-### Using the process scheduler
+### 2.3. Using the process scheduler
 
 The process scheduler used by `sinicron` is [supercronic](https://github.com/aptible/supercronic), a simple, container-friendly cron implementation.
 
@@ -75,7 +96,7 @@ Important things to note about `supercronic`:
 
 To add your own schedule definitions you use `/etc/supercronic/crontab` which has the familiar format. **The crontab file MUST exist otherwise `supercronic` won't start.** By default it contains nothing important so you can safely remap the file or the entire dir.
 
-### Using sudo
+### 2.4. Using sudo
 
 If you're running from a `-sudo` image, the designated user can run `/usr/bin/sudo` without a password to elevate to root.
 
@@ -84,7 +105,7 @@ Unfortunately sometimes sudo is necessary as a last resort. But consider whether
 * Adding specific capabilities with `cap_add`.
 * Becoming a member of specific groups with `group_add`. This can help you for example access some devices such as `/dev/dri` for graphical acceleration.
 
-### Security considerations
+### 2.5. Security considerations
 
 If you are using any of the following container restrictions (you should!) please note the caveats:
 
@@ -108,9 +129,10 @@ If you are using any of the following container restrictions (you should!) pleas
         ```
         command: ["--socket-path", "/other/path/socketfilename"]
         ```
-## Building your own image
 
-### Build arguments
+## 3. Building your own image
+
+### 3.1. Build arguments
 
 * `USERNAME`: determines the name of the designated user inside the image and their `/home` dir. Defaults to `somebody`.
 * `GROUPNAME`: determines the group name of the designated user. This is the only group that the user belongs to. Defaults to the value of `$USERNAME`.
@@ -121,7 +143,7 @@ If you are using any of the following container restrictions (you should!) pleas
 * `SUDO`: determines whether the resulting image has sudo capability enabled for the designated user. Valid values are `sudo` or `nosudo`. Defaults to `sudo`.
 * `CRON`: determines whether the resulting image will have the process scheduler installed and running. Valid values are `cron` and `nocron`. Defaults to `cron`.
 
-### An example for extending the base image
+### 3.2. An example for extending the base image
 
 ```
 FROM ghcr.io/zuavra/sinicron:1-sudo-cron
@@ -137,3 +159,11 @@ The most important thing to remember is that the base `sinicron` images are set 
 If you'd like your image to maintain running as the non-privileged user you should switch back to it at the end.
 
 Remember that you can use the variables `$USERNAME`, `$GROUPNAME`, `$PUID`, `$PGID` and `$SINICRON_VERSION` if you need to.
+
+And here's how to generate specific image combinations:
+
+```
+$ docker build --build-arg SINICRON_VERSION=custom \
+--build-arg SUDO=nosudo --build-arg CRON=nocron \
+--tag=local/sinicron:${SINICRON_VERSION}-nosudo-nocron
+```
