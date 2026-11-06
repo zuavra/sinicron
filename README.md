@@ -39,7 +39,7 @@ These are the current latest tags:
 * [latest-nosudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1510699240?tag=latest-nosudo-nocron)
 * [latest-nosudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1510677637?tag=latest-nosudo-cron)
 
-You can also use an exact version (e.g. `1.2.3-nosudo-nocron`), or a minor version shortcut to the latest version of that minor (e.g. `1.2-nosudo-nocron`).
+You can also use an exact version (e.g. `1.2.3-nosudo-nocron`), or a minor version shortcut to the latest version of the minor (e.g. `1.2-nosudo-nocron`) or the major (e.g. `1-nosudo-nocron`).
 
 ## 2. Using the image
 
