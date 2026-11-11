@@ -34,10 +34,10 @@ There are always 4 flavors of the image, combinations of with/without cron and s
 
 These are the current latest tags:
 
-* [latest-sudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1510700299?tag=latest-sudo-nocron)
-* [latest-sudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1510699938?tag=latest-sudo-cron)
-* [latest-nosudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1510699240?tag=latest-nosudo-nocron)
-* [latest-nosudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1510677637?tag=latest-nosudo-cron)
+* [latest-sudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1545318556?tag=latest-sudo-nocron)
+* [latest-sudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1545320347?tag=latest-sudo-cron)
+* [latest-nosudo-nocron](https://github.com/users/zuavra/packages/container/sinicron/1545319279?tag=latest-nosudo-nocron)
+* [latest-nosudo-cron](https://github.com/users/zuavra/packages/container/sinicron/1545313350?tag=latest-nosudo-cron)
 
 You can also use an exact version (e.g. `1.2.3-nosudo-nocron`), or a minor version shortcut to the latest version of the minor (e.g. `1.2-nosudo-nocron`) or the major (e.g. `1-nosudo-nocron`).
 

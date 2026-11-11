@@ -1,0 +1,19 @@
+#!/bin/sh
+FORMAT=$(/usr/bin/awk 'BEGIN {
+    n = 0
+    for (i = 1; i < ARGC; i++) {
+        n++
+        if (ARGV[i] == "--ts")
+            prefix[n] = "%Y-%m-%d %H:%M:%S"
+        else
+            prefix[n] = "[" ARGV[i] "]"
+    }
+
+    out = ""
+    for (i = 1; i <= n; i++)
+        out = (i == 1) ? prefix[i] : out " " prefix[i]
+
+    print out
+}' "$@")
+
+exec /usr/bin/ts "$FORMAT"

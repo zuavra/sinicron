@@ -8,6 +8,9 @@ USER root
 
 ## SET UP TIMEKEEPING AND TZ ENV VAR SUPPORT
 RUN apk add tzdata
+## SET UP OUTPUT PREFIXING
+RUN apk add outils-ts
+ADD --chown=root:root --chmod=755 scripts/ts-prefix /usr/bin/ts-prefix
 
 ###################################################################################
 FROM base AS user
